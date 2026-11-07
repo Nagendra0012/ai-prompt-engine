@@ -1,6 +1,6 @@
 # AI Prompt Engine
 
-Turn a rough idea into a ready-to-paste prompt, or rewrite an existing prompt. Your AI assistant asks three short multiple-choice questions, accepts custom answers, then writes one finished prompt. The connector supplies the quiz and editing brief. The AI you already use does the writing. The connector needs no model API key and has no usage fee. Your AI client's own plan limits still apply.
+AI Prompt Engine is a Model Context Protocol (MCP) connector that helps you turn an idea into a prompt or improve a draft. Start with a request like “help me build a portfolio.” Your AI assistant asks three short questions, then uses your answers to write one prompt you can copy into ChatGPT, Claude, Gemini, or another AI tool. The connector uses your existing assistant and requires no separate model API key.
 
 Try **“Use AI Prompt Engine to create a portfolio prompt for an entry-level cloud security role.”** The quiz asks who will read the portfolio, what proof to feature, and whether you want a working site, copy, or a design. For a rewrite, try **“Use AI Prompt Engine to improve this prompt: Write my resume for a SOC analyst role.”** The last question asks what you want changed.
 
