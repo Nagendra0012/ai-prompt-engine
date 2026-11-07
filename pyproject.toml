@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-prompt-engine"
+version = "0.1.0"
+description = "A quiz-first prompt editor for MCP-compatible AI assistants"
+requires-python = ">=3.11"
+dependencies = ["mcp==1.29.0"]
+
+[project.scripts]
+ai-prompt-engine = "prompt_engine.server:main"
+
+[tool.setuptools.packages.find]
+include = ["prompt_engine*"]
