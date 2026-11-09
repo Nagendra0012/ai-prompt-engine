@@ -6,6 +6,16 @@ Try **“Use AI Prompt Engine to create a portfolio prompt for an entry-level cl
 
 Built-in quizzes cover resumes, applications, websites, portfolios, coding, cybersecurity, writing, research and a general-purpose category.
 
+## Three ways to guide the quiz
+
+- **Bring an example.** Supply your idea or prompt and label the excerpt you like. Choose which qualities to reuse, such as its structure or level of detail. Names, numbers and claims from the example are excluded unless you independently provide them as facts.
+- **Repair an unsatisfactory answer.** Paste the original prompt and the unwanted AI response separately. The quiz asks what went wrong. Your assistant turns your diagnosis into an instruction for a new prompt. The old answer provides evidence of the failure, not facts about you.
+- **Resolve a tradeoff.** If two of your requirements compete, the assistant identifies the pair before starting the quiz. One question asks which to prioritize. Choose either requirement or give a custom compromise. A priority you already specified needs no new decision.
+
+For example, paste: “Improve my original prompt: Write a one-page cover letter and include every detail from my resume. Previous answer: It says I led a 12-person incident response team, which I never did. Style example: I like this sample’s short paragraphs.” The three questions cover the inaccurate claim, the sample quality to reuse, and the length-versus-detail priority.
+
+For MCP clients, both tools accept the same optional inputs: `example`, `previous_output` (improve mode), and `competing_requirements` (two concise strings). The host identifies conflicts in the original request; the connector builds the questions and records the user's resolution. Repeat the same inputs in both calls so the answers match their questions. These inputs are request-scoped. Original calls without them still work.
+
 ## Run it on your computer
 
 Use Python 3.11 or newer. Clone the repository and open it in a terminal. You can also download the source ZIP and extract it.

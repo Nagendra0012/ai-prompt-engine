@@ -35,6 +35,46 @@ async def exercise(streams, expected_prefs):
                 brief = json.loads(response.content[0].text)
                 assert brief["style_defaults"] == expected_prefs and brief["source"] == source
                 assert [q["answer"] for q in brief["quiz_answers"]] == answers
+        # Each new option can operate alone or share the same three quiz slots.
+        sample = "I managed 50 servers. Keep the sentences short."
+        prior = "I have an invented certification."
+        conflict = ["Keep it to one page", "Include all project details"]
+        for mask in range(1, 8):
+            opts = {}
+            if mask & 1:
+                opts["example"] = sample
+            if mask & 2:
+                opts["previous_output"] = prior
+            if mask & 4:
+                opts["competing_requirements"] = conflict
+            params = {"category": "resume", "mode": "improve" if mask & 2 else "create", **opts}
+            quiz_result = await session.call_tool("start_quiz", params)
+            assert not quiz_result.isError
+            rows = json.loads(quiz_result.content[0].text)["questions"]
+            assert len(rows) == 3 and all(q["custom_answer_allowed"] for q in rows)
+            answers = [q["choices"][0] for q in rows]
+            if mask & 4:
+                assert rows[2]["choices"] == conflict
+                answers[2] = "One page; put other details in a separate appendix."
+            result = await session.call_tool("prepare_prompt", {
+                **params, "source": "Write about only my supplied experience.", "answers": answers,
+            })
+            assert not result.isError
+            brief = json.loads(result.content[0].text)
+            assert brief["style_defaults"] == expected_prefs
+            assert [q["question"] for q in brief["quiz_answers"]] == [q["question"] for q in rows]
+            if mask & 1:
+                assert brief["example_reference"] == {"sample": sample, "qualities": answers[1]}
+                assert "style reference" in brief["editor_instruction"]
+            if mask & 2:
+                assert brief["repair"] == {"previous_output": prior, "reported_failure": answers[0]}
+                assert "never a factual source" in brief["editor_instruction"]
+            if mask & 4:
+                assert brief["constraint_resolution"] == {"requirements": conflict, "user_priority": answers[2]}
+        for extra in [{"example":" "}, {"previous_output":prior},
+                      {"competing_requirements":["A","a"]}, {"competing_requirements":["A"]}]:
+            rejected = await session.call_tool("start_quiz", {"category":"resume", "mode":"create", **extra})
+            assert rejected.isError
         invalid = await session.call_tool("prepare_prompt", {**params, "source": "Goal", "answers": []})
         assert invalid.isError
 
